@@ -35,4 +35,5 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
 }

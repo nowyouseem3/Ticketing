@@ -20,12 +20,15 @@ class DBConfig {
         config.jdbcUrl = "jdbc:postgresql://192.168.4.134:$port/postgres"
         config.username = appConf.property("db.userName").getString()
         config.password = appConf.property("db.userPassword").getString()
+        config.leakDetectionThreshold = 2000
+        config.maxLifetime = 900000
+        config.idleTimeout = 900000
         config.addDataSourceProperty("cachePrepStmts", "true")
         config.addDataSourceProperty("prepStmtCacheSize", "255")
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
         ds = HikariDataSource(config)
 
-        return  ds!!.connection
+        return this.ds!!.connection
     }
 }
 

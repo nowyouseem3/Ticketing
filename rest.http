@@ -1,0 +1,21 @@
+### get information of Tickets
+GET http://192.168.4.134:3000/Tickets
+Content-Type: application/json
+
+### Posting of Ticket/s
+POST http://192.168.4.134:3000/request-ticket
+Content-Type: application/json
+
+{
+  "requestor": "Junsay, Sidrick C.",
+  "toSupport": "Ryan Andal",
+  "category": "SOFTWARE",
+  "subCategory": "MEAL RESERVATION",
+  "description": "",
+  "reportedVia": "E-MAIL",
+  "floor": "1ST FLOOR, STARBOARD SIDE",
+  "areaLoc": "APPLICATION DEVELOPMENT",
+  "assignDepartment": "APPLICATION DEVELOPMENT",
+  "assignTo": "",
+  "coAssignTo": ""
+}

@@ -1,3 +1,3 @@
 package get.queries
 
-const val getDescription = "SELECT * FROM description_table"
+const val insertDescription = "INSERT INTO description_table (ticket_id, description) VALUES (?, ?)"

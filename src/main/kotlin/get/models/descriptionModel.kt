@@ -6,6 +6,6 @@ import javax.security.auth.Destroyable
 @Serializable
 data class GetDescription(
     val descriptionId: Int,
-    val descriptinval: String
+    val descriptionVal: String
 ):Destroyable
 
