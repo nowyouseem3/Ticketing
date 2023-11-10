@@ -1,6 +1,5 @@
 package get.controllers
 
-import get.models.CreateTicketFunction
 import get.models.GetAllTickets
 import get.plugins.DBConfig
 import get.queries.createTicketQuery
@@ -32,6 +31,7 @@ class TicketController {
                         val assignToFirstName = data.getString("assign_to_name")
                         val assignToLastName = data.getString("assign_to_lastname")
                         val assignToName = "$assignToLastName, $assignToFirstName"
+                        val assignToID = data.getString("assign_to_id")
                         val coAssignFirstName = data.getString("co_assign_name")
                         val coAssignLastName = data.getString("co_assign_lastname")
                         val coAssign = "$coAssignLastName, $coAssignFirstName"
@@ -49,6 +49,7 @@ class TicketController {
                             floorName,
                             reportedVia,
                             assignToName,
+                            assignToID,
                             coAssign,
                             dateTime
                         ))

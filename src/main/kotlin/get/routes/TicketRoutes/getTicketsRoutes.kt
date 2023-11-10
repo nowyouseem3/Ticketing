@@ -16,7 +16,6 @@ fun Route.displayTicketRouting(){
                 }finally {
                     ticket.clear()
                 }
-
             }catch (e: Exception){
                 call.respond(GenericResponse("Server Error", 500, data = "Message: $e"))
             }

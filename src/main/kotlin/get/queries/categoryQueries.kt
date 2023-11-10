@@ -12,10 +12,11 @@ const val getNestedSubCategory = "" +
         "WHERE " +
         "sub_category_table.assign_department_id = assigned_department_table.assigned_department_id and " +
         "category_id_relation = ?"
-const val getSubCategory = "SELECT * FROM sub_category_table"
 
+const val getSubCategory = "SELECT * FROM sub_category_table"
 const val insertSubCategory= "INSERT INTO sub_category_table (sub_category_name, category_id_relation, assign_department_id) VALUES (?, ?, ?)"
 const val updateSubCategory= "UPDATE sub_category_table SET assign_department_id = ?, category_id_relation = ? WHERE sub_category_name = ?"
+const val listen = "SELECT pg_notify('updated_sub_category_notify')"
 
 const val getAssignedDepartment = "SELECT * FROM assigned_department_table"
 const val getLiveAssignedDepartment = "SELECT department_id, department_name FROM user_info.department_info_table WHERE department_name LIKE ?"

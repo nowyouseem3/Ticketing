@@ -12,7 +12,7 @@ const val getAllTickets = "" +
         "status_name, " +
         "status_code, " +
         "requestor_table.requester_fname, " +
-        "requestor_table.requester_lname, " +
+        "requestor_table.requester_lname," +
         "to_support_table.requester_fname as tosupport_fname, " +
         "to_support_table.requester_lname as tosupport_lname, " +
         "category_name, " +
@@ -23,6 +23,7 @@ const val getAllTickets = "" +
         "assign_department_name, " +
         "assign_to_table.assign_to_name, " +
         "assign_to_table.assign_to_lastname, " +
+        "assign_to_table.user_id as assign_to_id, " +
         "co_assign_table.assign_to_name as co_assign_name, " +
         "co_assign_table.assign_to_lastname as co_assign_lastname, " +
         "time_data " +

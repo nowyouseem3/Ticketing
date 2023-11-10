@@ -32,7 +32,6 @@ data class Category(
 data class NestedCategory(
     val categoryId: Int,
     val categoryName: String,
-    val subCategory: MutableList<NestedSubCategory>
 ):Destroyable
 
 
@@ -73,15 +72,12 @@ data class FloorArea(
 
 @Serializable
 data class AreaRoom(
-    val floorIdRelation: Int,
     val areaLocationId: Int,
     val areaLocationName: String
 ): Destroyable
 
 @Serializable
 data class LiveAreaRoom(
-    val floorName: String,
-    val floorId: Int,
     val areaId: Int,
     val areaLocationName: String
 ): Destroyable
@@ -94,6 +90,14 @@ data class GetReportedVia(
 
 @Serializable
 data class GetAssign(
+    val assignToId: Int,
+    val availability: Int,
+    val userId: String,
+    val assignToName: String,
+): Destroyable
+
+@Serializable
+data class GetAssigned(
     val assignToId: Int,
     val userId: String,
     val assignToName: String,

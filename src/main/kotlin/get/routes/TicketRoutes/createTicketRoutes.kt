@@ -43,9 +43,11 @@ fun Route.requestTicketRouting(){
                         assignTo,
                         ticketDate
                     )
+                var descriptionString = description
+                if (descriptionString.isNullOrBlank()) descriptionString = "No Description"
                 TicketFunctions()
                     .insertDescription(
-                        description,
+                        descriptionString,
                         ticketId
                     )
                 try {
@@ -94,6 +96,23 @@ fun Route.requestTicketRouting(){
         }
     }
 
+    route("/ticket-sub-category") {
+        get("{categoryId?}") {
+            try {
+                val categoryId = call.parameters["categoryId"]
+                var subCategory = TicketFunctions().getNestedSubCategory(categoryId!!.toInt())
+                try {
+                    call.respond(GenericResponse("Success", 200, data = subCategory))
+                }finally {
+                    subCategory.clear()
+                }
+            }
+            catch (e: Exception){
+                call.respond(GenericResponse("Server Error", 500, data = "Message: $e"))
+            }
+        }
+    }
+
     route("/ticket-department") {
         get("{departmentName?}") {
             try {
@@ -112,12 +131,31 @@ fun Route.requestTicketRouting(){
         }
     }
 
-    route("/ticket-designation") {
-        get("{designation?}") {
+    route("/ticket-area") {
+        get("{area?}") {
             try {
-                val designationName = call.parameters["designation"]
+                val designationName = call.parameters["area"]?.capitalize()
                 var designation = TicketFunctions().getLiveArea("${designationName}%")
                 if (designationName.isNullOrBlank()) designation = TicketFunctions().getAllArea()
+                try {
+                    call.respond(GenericResponse("Success", 200, data = designation))
+                }finally {
+                    designation.clear()
+                }
+            }catch (e: Exception){
+                call.respond(GenericResponse("Server Error", 500, data = "Message: $e"))
+            }
+        }
+    }
+
+    route("/ticket-floor") {
+        get("{area?}/{floor?}") {
+            try {
+                val areaId = call.parameters["area"]
+                val floorName = call.parameters["floor"]
+                if (areaId.isNullOrBlank()) return@get call.respond(GenericResponse("Success", 200, data = "Choose Department"))
+                var designation = TicketFunctions().getLiveFloor("${floorName}%", areaId!!.toInt())
+                if (floorName.isNullOrBlank()) designation = TicketFunctions().getAllFloor(areaId!!.toInt())
                 try {
                     call.respond(GenericResponse("Success", 200, data = designation))
                 }finally {
@@ -165,17 +203,4 @@ fun Route.requestTicketRouting(){
         }
     }
 
-    route("/ticket-insert-subcategory"){
-        post() {
-            try {
-                val subcategoryData = call.receive<SubCategoryResponse>()
-                val (categoryId, subCategoryName, departmentId) = subcategoryData
-                if (categoryId.toString().isNullOrBlank()) call.respond(GenericResponse("Success", 200, data = "Please Select Category"))
-                    TicketFunctions().findInsertSubCategory(subCategoryName, categoryId, departmentId)
-                call.respond(GenericResponse("Success", 200, data = "Created"))
-            }catch (e: Exception){
-                call.respond(GenericResponse("Server Error", 500, data = "Message: $e"))
-            }
-        }
-    }
 }

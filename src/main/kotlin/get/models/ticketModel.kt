@@ -22,7 +22,7 @@ data class CreateTicket(
 data class GetAllTickets(
     val ticketId: String,
     val ticketStatus: String,
-    val ticketCode: Int,
+    val ticketStatusCode: Int,
     val requester: String,
     val toSupport: String,
     val category: String,
@@ -32,6 +32,7 @@ data class GetAllTickets(
     val floor: String,
     val reportedVia:String,
     val assignTo: String,
+    val assignToId: String,
     val coAssign: String,
     val dateTime: String
 ): Destroyable

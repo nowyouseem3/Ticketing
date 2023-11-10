@@ -94,7 +94,7 @@ class TicketFunctions {
                         val id = dataSet.getInt("category_id")
                         val name = dataSet.getString("category_name")
 
-                        dataResult.add(NestedCategory(id, name, getNestedSubCategory(id)))
+                        dataResult.add(NestedCategory(id, name))
                     }
                     return dataResult
                 }
@@ -109,7 +109,7 @@ class TicketFunctions {
                     while (dataSet.next()){
                         val id = dataSet.getInt("category_id")
                         val name = dataSet.getString("category_name")
-                        dataResult.add(NestedCategory(id, name, getNestedSubCategory(id)))
+                        dataResult.add(NestedCategory(id, name))
                     }
                     return dataResult
                 }
@@ -117,7 +117,7 @@ class TicketFunctions {
         }
     }
 
-     private fun getNestedSubCategory(categoryId: Int): MutableList<NestedSubCategory>{
+     fun getNestedSubCategory(categoryId: Int): MutableList<NestedSubCategory>{
          DBConfig().connection().use { con ->
              con.prepareStatement(getNestedSubCategory).use {
                  it.setInt(1, categoryId)
@@ -197,11 +197,10 @@ class TicketFunctions {
                 it.executeQuery().use { dataset ->
                     val dataResult = mutableListOf<AreaRoom>()
                     while (dataset.next()){
-                        val relationId = dataset.getInt("floor_id_relation")
                         val id = dataset.getInt("area_loc_id")
                         val name = dataset.getString("area_loc_name")
 
-                        dataResult.add(AreaRoom(relationId, id, name))
+                        dataResult.add(AreaRoom(id, name))
                     }
                     return dataResult
                 }
@@ -217,12 +216,10 @@ class TicketFunctions {
                 it.executeQuery().use { dataset ->
                     val dataResult = mutableListOf<LiveAreaRoom>()
                     while (dataset.next()){
-                        val relationId = dataset.getString("floor_name")
-                        val floorId = dataset.getInt("floor_id")
-                        val areaId = dataset.getInt("area_loc_id")
+                        val areaId = dataset.getInt("area_id")
                         val name = dataset.getString("area_loc_name")
 
-                        dataResult.add(LiveAreaRoom(relationId, floorId, areaId, name))
+                        dataResult.add(LiveAreaRoom(areaId, name))
                     }
                     return dataResult
                 }
@@ -236,12 +233,10 @@ class TicketFunctions {
                 it.executeQuery().use { dataset ->
                     val dataResult = mutableListOf<LiveAreaRoom>()
                     while (dataset.next()){
-                        val relationId = dataset.getString("floor_name")
-                        val floorId = dataset.getInt("floor_id")
-                        val areaId = dataset.getInt("area_loc_id")
+                        val areaId = dataset.getInt("area_id")
                         val name = dataset.getString("area_loc_name")
 
-                        dataResult.add(LiveAreaRoom(relationId, floorId, areaId, name))
+                        dataResult.add(LiveAreaRoom(areaId, name))
                     }
                     return dataResult
                 }
@@ -262,6 +257,41 @@ class TicketFunctions {
                         val name = dataset.getString("floor_name")
 
                         dataResult.add(FloorArea(id, name))
+                    }
+                    return dataResult
+                }
+            }
+        }
+    }
+    fun getAllFloor(areaId: Int): MutableList<FloorArea>{
+        DBConfig().connection().use { con ->
+            con.prepareStatement(getLiveAllFloor).use {
+                it.setInt(1, areaId)
+                it.executeQuery().use { dataset ->
+                    val dataResult = mutableListOf<FloorArea>()
+                    while (dataset.next()){
+                        val floorId = dataset.getInt("floor_id")
+                        val name = dataset.getString("floor_name")
+
+                        dataResult.add(FloorArea(floorId, name))
+                    }
+                    return dataResult
+                }
+            }
+        }
+    }
+    fun getLiveFloor(floor: String, areaId: Int): MutableList<FloorArea>{
+        DBConfig().connection().use { con ->
+            con.prepareStatement(getLiveFloor).use {
+                it.setString(1, floor)
+                it.setInt(2, areaId)
+                it.executeQuery().use { dataset ->
+                    val dataResult = mutableListOf<FloorArea>()
+                    while (dataset.next()){
+                        val areaId = dataset.getInt("floor_id")
+                        val name = dataset.getString("floor_name")
+
+                        dataResult.add(FloorArea(areaId, name))
                     }
                     return dataResult
                 }
@@ -304,18 +334,18 @@ class TicketFunctions {
         }
     }
 
-    private fun getAssign(): MutableList<GetAssign>{
+    private fun getAssign(): MutableList<GetAssigned>{
         DBConfig().connection().use { con ->
             con.prepareStatement(assignToQuery).use {
                 it.executeQuery().use { dataset ->
-                    val dataResult = mutableListOf<GetAssign>()
+                    val dataResult = mutableListOf<GetAssigned>()
                     while (dataset.next()){
                         val id = dataset.getInt("assign_to_id")
                         val userId = dataset.getString("user_id")
                         val fName = dataset.getString("assign_to_name")
                         val lName = dataset.getString("assign_to_lastname")
                         val name = "$lName, $fName"
-                        dataResult.add(GetAssign(id, userId, name))
+                        dataResult.add(GetAssigned(id, userId, name))
                     }
                     return dataResult
                 }
@@ -332,10 +362,11 @@ class TicketFunctions {
                     while (data.next()){
                         val id = data.getInt("department_id")
                         val userId = data.getString("user_id")
+                        val availability = data.getInt("availability")
                         val fName = data.getString("first_name")
                         val lName = data.getString("last_name")
                         val name = "$lName, $fName"
-                        dataResult.add(GetAssign(id, userId, name))
+                        dataResult.add(GetAssign(id,availability, userId, name))
                     }
                     return dataResult
                 }
@@ -355,10 +386,11 @@ class TicketFunctions {
                     while (data.next()){
                         val id = data.getInt("department_id")
                         val userId = data.getString("user_id")
+                        val availability = data.getInt("availability")
                         val fName = data.getString("first_name")
                         val lName = data.getString("last_name")
                         val name = "$lName, $fName"
-                        dataResult.add(GetAssign(id, userId, name))
+                        dataResult.add(GetAssign(id, availability, userId, name))
                     }
                     return dataResult
                 }
@@ -454,6 +486,11 @@ class TicketFunctions {
         }
     }
 
+    fun findInsertCategory(categoryName: String){
+        getCategory().find {
+            it.categoryName == categoryName
+        }?: insertCategory(categoryName)
+    }
 
     fun findInsertSubCategory(subCategory: String, categoryId: Int, departmentId: Int){
         getSubCategory().find {
@@ -461,12 +498,22 @@ class TicketFunctions {
         }?: insertSubCategory(subCategory, categoryId, departmentId)
         updateSubCategory(subCategory, categoryId, departmentId)
     }
+
     private fun insertSubCategory(subCategory: String, categoryId: Int, departmentId: Int){
         DBConfig().connection().use {
             it.prepareStatement(insertSubCategory).use { data ->
                 data.setString(1, subCategory)
                 data.setInt(2, categoryId)
                 data.setInt(3, departmentId)
+                data.executeUpdate()
+            }
+        }
+    }
+
+    private fun insertDepartment(department: String){
+        DBConfig().connection().use {
+            it.prepareStatement(insertAssignedDepartment).use { data ->
+                data.setString(1, department)
                 data.executeUpdate()
             }
         }
@@ -529,6 +576,10 @@ class TicketFunctions {
             }
         }
     }
+
+    /*
+    *
+    * Start for Ticket Generator and name corrector*/
     private fun nameSeparator(name: String): MutableList<SplitName>{
         val nameData = mutableListOf<SplitName>()
         val newName = name.split(", ").toTypedArray()
