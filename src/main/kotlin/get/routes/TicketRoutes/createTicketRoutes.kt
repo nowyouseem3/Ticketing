@@ -29,31 +29,45 @@ fun Route.requestTicketRouting(){
                 ) = ticketDetails
                 val ticketId = ticketIdGen()
                 val ticketDate = timeDate()
-                TicketController()
-                    .createTicketController(
-                        ticketId,
+                var descriptionString = description
+                if (TicketFunctions().ticketValidation(
                         requester,
                         toSupport,
                         category,
                         subCategory,
-                        assignDepartment,
-                        floor,
                         areaLoc,
+                        floor,
                         reportedVia,
-                        assignTo,
-                        ticketDate
-                    )
-                var descriptionString = description
-                if (descriptionString.isNullOrBlank()) descriptionString = "No Description"
-                TicketFunctions()
-                    .insertDescription(
-                        descriptionString,
-                        ticketId
-                    )
+                        assignDepartment
+                        )
+                    ){
+                    TicketController()
+                        .createTicketController(
+                            ticketId,
+                            requester,
+                            toSupport,
+                            category,
+                            subCategory,
+                            assignDepartment,
+                            floor,
+                            areaLoc,
+                            reportedVia,
+                            assignTo,
+                            ticketDate
+                        )
+                    if (descriptionString.isBlank()) descriptionString = "No Description"
+                    TicketFunctions()
+                        .insertDescription(
+                            descriptionString,
+                            ticketId
+                        )
+                }else
+                    call.respond(GenericResponse("Success", 200, data = "Leave no Blank"))
                 try {
                     call.respond(GenericResponse("Success", 200, data = "Ticket Created"))
                 }finally {
                     ticketDetails.destroy()
+
                 }
             }catch (e: Exception){
                 call.respond(GenericResponse("Server Error", 500, data = "Message: $e"))

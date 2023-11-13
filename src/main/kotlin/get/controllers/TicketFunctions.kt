@@ -419,6 +419,30 @@ class TicketFunctions {
     }
 
     /*
+    * Create ticket validation for inputs
+    * */
+
+    fun ticketValidation(
+        requester: String,
+        toSupport: String,
+        category: Int,
+        subCategory: Int,
+        area: Int,
+        floor: Int,
+        reportedVia: Int,
+        assignDepartment: Int
+    ): Boolean{
+        return !(requester.isBlank() ||
+                toSupport.isBlank() ||
+                category.toString().isBlank() ||
+                subCategory.toString().isBlank() ||
+                area.toString().isBlank() ||
+                floor.toString().isBlank() ||
+                reportedVia.toString().isBlank() ||
+                assignDepartment.toString().isBlank())
+    }
+
+    /*
     * end function getting all dataset from db
     *
     * here start function for checking all input data in create ticket form
